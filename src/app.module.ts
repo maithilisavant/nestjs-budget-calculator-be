@@ -2,10 +2,12 @@ import { Module } from "@nestjs/common"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UsersModule } from "./users/users.module"
-import { BudgetItemsModule } from "./budget-items/budget-items.module"
 import { AuthModule } from "./auth/auth.module"
+import { GroupsModule } from "./groups/groups.module"
+import { ExpensesModule } from "./expenses/expenses.module"
 import { User } from "./users/entities/user.entity"
-import { BudgetItem } from "./budget-items/entities/budget-item.entity"
+import { Group } from "./groups/entities/group.entity"
+import { Expense } from "./expenses/entities/expense.entity"
 
 @Module({
   imports: [
@@ -22,13 +24,14 @@ import { BudgetItem } from "./budget-items/entities/budget-item.entity"
         username: configService.get("DB_USERNAME", "postgres"),
         password: configService.get("DB_PASSWORD", "postgres"),
         database: configService.get("DB_DATABASE", "budget_calculator"),
-        entities: [User, BudgetItem],
+        entities: [User, Group, Expense],
         synchronize: configService.get<boolean>("DB_SYNCHRONIZE", true),
       }),
     }),
     UsersModule,
-    BudgetItemsModule,
     AuthModule,
+    GroupsModule,
+    ExpensesModule,
   ],
 })
 export class AppModule {}

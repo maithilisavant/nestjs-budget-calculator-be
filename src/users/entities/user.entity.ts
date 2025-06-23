@@ -1,10 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm"
-import { BudgetItem } from "../../budget-items/entities/budget-item.entity"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, OneToMany } from "typeorm"
+import { Group } from "../../groups/entities/group.entity"
+import { Expense } from "../../expenses/entities/expense.entity"
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn("uuid")
+  id: string
 
   @Column({ unique: true })
   auth0Id: string
@@ -15,9 +16,12 @@ export class User {
   @Column({ unique: true })
   email: string
 
-  @OneToMany(
-    () => BudgetItem,
-    (budgetItem) => budgetItem.user,
-  )
-  budgetItems: BudgetItem[]
+  @ManyToMany(() => Group, group => group.members)
+  groups: Group[]
+
+  @OneToMany(() => Expense, expense => expense.paidBy)
+  expenses: Expense[]
+
+  @OneToMany(() => Group, group => group.createdBy)
+  createdGroups: Group[]
 }

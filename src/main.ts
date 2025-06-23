@@ -7,7 +7,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
   // Enable CORS
-  app.enableCors()
+  app.enableCors({
+    origin: ["http://localhost:3000"], // Add your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
+  })
 
   // Set up global validation pipe
   app.useGlobalPipes(
@@ -27,7 +31,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup("api", app, document)
 
-  await app.listen(3000)
+  await app.listen(3001)
   console.log(`Application is running on: ${await app.getUrl()}`)
 }
 bootstrap()
